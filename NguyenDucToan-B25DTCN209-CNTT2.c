@@ -40,7 +40,8 @@ struct Product products[MAX]={
     {"P27","Giay Ve Sinh Bless You","Cuon",115,1},
     {"P28","Sua Dabaco","Hop",190,1},
     {"P29","Duong Bien","Kg",250,1},
-    {"P30","Muoi Iot","Kg",280,1}
+    {"P30","Muoi Iot","Kg",280,1},
+    {"P31","Sieu nhan Gao","Con",90,1},
 };
 int count=30;
 
@@ -383,18 +384,5 @@ void sortProduct(){
 			printf("Lua chon khong hop le!!\n");
 			return;
 	}
-	printf("+------------+------------------------------+------------+-------------------+------------------+\n");
-	printf("| Ma         | Ten                          | Don vi     | So luong ton kho  | Trang thai       |\n");
-	printf("+------------+------------------------------+------------+-------------------+------------------+\n");
-	for(int i=0;i<count;i++){
-		printf("| %-10s | %-28s | %-10s | %-17d | %-16s |\n",
-	    products[i].productId,
-	    products[i].name,
-	    products[i].unit,
-	    products[i].qty,
-	    products[i].status?"Con su dung":"Het han su dung");
-		printf("+------------+------------------------------+------------+-------------------+------------------+\n");
-	}
+	showProduct();
 }
-
-
