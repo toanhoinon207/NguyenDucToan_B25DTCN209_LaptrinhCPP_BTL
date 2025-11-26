@@ -57,7 +57,9 @@ void sortProduct();
 int main(){
 	int choice;
 	do{
-		printf("+-----QUAN LY CUA HANG TIEN LOI-----+\n");
+		printf("+-----------------------------------+\n");
+		printf("|     QUAN LY CUA HANG TIEN LOI     |\n");
+		printf("+-----------------------------------+\n");
 		printf("|1. Them mat hang moi.              |\n");
 		printf("|2. Cap nhat thong tin.             |\n");
 		printf("|3. Quan ly trang thai (Khoa/Xoa).  |\n");
@@ -395,3 +397,4 @@ void sortProduct(){
 		printf("+------------+------------------------------+------------+-------------------+------------------+\n");
 	}
 }
+
