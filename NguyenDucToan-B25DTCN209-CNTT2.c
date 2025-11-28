@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #define MAX 100
 
-struct Product{
+struct Product{			// cau truc san pham
 	char productId[10];
 	char name[50];
 	char unit[10];
@@ -11,17 +11,17 @@ struct Product{
 	int status;
 };
 
-struct Transaction{
+struct Transaction{     // cau truc giao dich
 	char transId[20];
 	char productId[10];
 	char type[5];
 	char date[15];
 };
 
-struct Transaction trans[100000];
+struct Transaction trans[100000];    //log giao dich
 int transCount=0;
 
-struct Product products[MAX]={
+struct Product products[MAX]={       // khoi tao thanh vien
 	{"P01","Sua Tuoi Vinamilk","Hop",120,1},
     {"P02","Mi Hao Hao","Thung",300,1},
     {"P03","Pepsi","Chai",150,1},
@@ -56,6 +56,7 @@ struct Product products[MAX]={
 };
 int count=30;
 
+//nguyen mau ham
 int existId(char id[]);
 void addProduct();
 void updateProduct();
@@ -121,6 +122,7 @@ int main(){
 	return 0;
 }
 
+//kiem tra ID ton tai
 int existId(char id[]){
 	for(int i=0;i<count;i++){
 		if(strcmp(products[i].productId,id)==0){
@@ -130,8 +132,9 @@ int existId(char id[]){
 	return 0;
 }
 
+//them hang hoa
 void addProduct(){
-	if(count==MAX){
+	if(count==MAX){     //kiem tra danh sach day
 		printf("Danh sach day! Them moi hang hoa that bai!!\n");
 		return;
 	}
@@ -141,7 +144,7 @@ void addProduct(){
 		fflush(stdin);
 		fgets(sp.productId,10,stdin);
 		sp.productId[strcspn(sp.productId,"\n")]=0;
-		if(strlen(sp.productId)==0){
+		if(strlen(sp.productId)==0){    //kiem tra nhap du lieu trong
 			printf("ID khong duoc de trong!!\n");
 			continue;
 		}
@@ -155,7 +158,7 @@ void addProduct(){
 		printf("Nhap ten hang hoa: ");
 		fgets(sp.name,50,stdin);
 		sp.name[strcspn(sp.name,"\n")]=0;
-		if(strlen(sp.name)==0){
+		if(strlen(sp.name)==0){     //kiem tra nhap du lieu trong
 			printf("Ten hang hoa khong duoc de trong!!\n");
 			continue;
 		}
@@ -165,7 +168,7 @@ void addProduct(){
 		printf("Nhap don vi hang hoa: ");
 		fgets(sp.unit,10,stdin);
 		sp.unit[strcspn(sp.unit,"\n")]=0;
-		if(strlen(sp.unit)==0){
+		if(strlen(sp.unit)==0){      //kiem tra nhap du lieu trong
 			printf("Don vi hang hoa khong duoc de trong!!\n");
 			continue;
 		}
@@ -173,12 +176,12 @@ void addProduct(){
 	}
 	while(1){
 		printf("Nhap so luong ton kho: ");
-		if(scanf("%d",&sp.qty)!=1){
+		if(scanf("%d",&sp.qty)!=1){      //kiem tra so luong la so
 			printf("Vui long nhap so!!\n");
 			while(getchar()!='\n');
 			continue;
 		}
-		if(sp.qty<0){
+		if(sp.qty<0){      //kiem tra so am
 			printf("So luong ton kho khong hop le!!\n");
 			continue;
 		}
@@ -190,6 +193,7 @@ void addProduct(){
 	printf("Them moi hang hoa thanh cong!!\n");
 }
 
+//cap nhat hang hoa
 void updateProduct(){
 	char id[10];
 	int index=-1;
@@ -203,7 +207,7 @@ void updateProduct(){
 			break;
 		}
 	}
-	if(index==-1){
+	if(index==-1){      //kiem tra ma hang hoa khong ton tai
 		printf("Vat tu %s khong ton tai trong danh sach!!\n",id);
 		return;
 	}
@@ -250,6 +254,7 @@ void updateProduct(){
 	printf("Cap nhat hang hoa %s thanh cong!!\n",products[index].productId);
 }
 
+//thay doi trang thai
 void changeStatus(){
 	char productId[10];
 	int index=-1;
@@ -271,11 +276,12 @@ void changeStatus(){
 	if(products[index].status==1){
 		products[index].status=0;
 		printf("Doi trang thai hang hoa %s thanh cong!!\n",productId);
-	}else{
+	}else{     //neu da la 0
 		printf("Hang hoa %s da duoc khoa!!\n",productId);
 	}
 }
 
+//chuyen chu hoa -> thuong
 void toLower(char s[]){
     int i=0;
     while(s[i]!='\0'){
@@ -286,6 +292,7 @@ void toLower(char s[]){
     }
 }
 
+//tim kiem hang hoa
 void searchProduct(){
 	char sch[50];
 	printf("Nhap ID hoac ten hang hoa can tra cuu: ");
@@ -298,7 +305,7 @@ void searchProduct(){
 	printf("+------------+------------------------------+------------+-------------------+------------------+\n");
 	printf("| Ma         | Ten                          | Don vi     | So luong ton kho  | Trang thai       |\n");
 	printf("+------------+------------------------------+------------+-------------------+------------------+\n");
-	for(int i=0;i<count;i++){
+	for(int i=0;i<count;i++){      //doi chu hoa -> thuong
 		char lowerID[20];
         strcpy(lowerID,products[i].productId);
         toLower(lowerID);
@@ -323,6 +330,7 @@ void searchProduct(){
 	}
 }
 
+//phan trang
 void showProduct(){
 	if(count==0){
 		printf("Danh sach hang hoa rong!!\n");
@@ -333,8 +341,8 @@ void showProduct(){
 	int index=0;
 	char ch;
 	int end;
-	int kq=count/itemPerPage;
-    int totalPage=(count%itemPerPage==0)?kq:kq+1;
+	int kq=count/itemPerPage;          //tinh so trang
+    int totalPage=(count%itemPerPage==0)?kq:kq+1;     
 	while(1){
 		printf("Moi ban nhap so trang can xem (1-%d): ",totalPage);
 		scanf("%d",&page);
@@ -363,6 +371,7 @@ void showProduct(){
 	}
 }
 
+//sap xep hang hoa
 void sortProduct(){
 	if(count==0){
 		printf("Danh sach hang hoa rong!!\n");
@@ -407,6 +416,7 @@ void sortProduct(){
 	showProduct();
 }
 
+//them vao log giao dich
 void addLog(char productId[],char type[]){
     strcpy(trans[transCount].transId,"T");
     sprintf(trans[transCount].transId + 1,"%d",transCount+1);
@@ -416,6 +426,7 @@ void addLog(char productId[],char type[]){
     transCount++;
 }
 
+//giao dich nhap/xuat
 void transaction(){
 	char productId[10];
 	char amount[10];
