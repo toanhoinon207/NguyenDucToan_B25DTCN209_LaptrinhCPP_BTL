@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #define MAX 100
 
 struct Product{
@@ -9,6 +10,16 @@ struct Product{
 	int qty;
 	int status;
 };
+
+struct Transaction{
+	char transId[20];
+	char productId[10];
+	char type[5];
+	char date[15];
+};
+
+struct Transaction trans[100000];
+int transCount=0;
 
 struct Product products[MAX]={
 	{"P01","Sua Tuoi Vinamilk","Hop",120,1},
@@ -53,6 +64,9 @@ void searchProduct();
 void toLower(char s[]);
 void showProduct();
 void sortProduct();
+void transaction();
+void addLog(char productId[],char type[]);
+void showHistory();
 
 int main(){
 	int choice;
@@ -90,6 +104,12 @@ int main(){
 			break;
 		case 6: 
 			sortProduct();
+			break;
+		case 7:
+			transaction();
+			break;
+		case 8:
+			showHistory();
 			break;
 		case 9:
 			printf("Thoat chuong trinh!!\n");
@@ -386,3 +406,135 @@ void sortProduct(){
 	}
 	showProduct();
 }
+
+void addLog(char productId[],char type[]){
+    strcpy(trans[transCount].transId,"T");
+    sprintf(trans[transCount].transId + 1,"%d",transCount+1);
+    strcpy(trans[transCount].productId,productId);
+    strcpy(trans[transCount].type,type);
+    strcpy(trans[transCount].date,"02/12/2025"); 
+    transCount++;
+}
+
+void transaction(){
+	char productId[10];
+	char amount[10];
+	int choice;
+	int qty;
+	int index=-1;
+	printf("+-------XUAT/NHAP HANG HOA------+\n");
+	printf("|1. Nhap hang.                  |\n");
+	printf("|2. Xuat hang.                  |\n");
+	printf("+-------------------------------+\n");
+	printf("Xin moi nhap lua chon: ");
+	scanf("%d",&choice);
+	while(1){
+		printf("Nhap ID hang hoa: ");
+		fflush(stdin);
+		fgets(productId,10,stdin);
+		productId[strcspn(productId,"\n")]=0;
+		if(strlen(productId)==0){
+			printf("ID hang hoa khong duoc de trong!!\n");
+			continue;
+		}
+		for(int i=0;i<count;i++){
+			if(strcmp(products[i].productId,productId)==0){
+				index=i;
+				break;
+			}
+		}
+		if(products[index].status==0){
+			printf("Vat tu %s da het han su dung!!\n",productId);
+			continue;
+		}
+		break;
+	}
+	if(index==-1){
+		printf("Vat tu %s khong ton tai trong danh sach!!\n",productId);
+		return;
+	}
+	switch(choice){
+		case 1:
+			while(1){
+				printf("Nhap so luong hang hoa can nhap: ");
+				fgets(amount,10,stdin);
+				amount[strcspn(amount,"\n")]=0;
+				if(strlen(amount)==0){
+					printf("So luong hang hoa can nhap khong duoc de trong!!\n");
+					continue;
+				}
+				qty=atoi(amount);
+				if(qty<=0){
+					printf("So luong nhap khong hop le!!\n");
+					continue;
+				}
+				break;
+			}
+			products[index].qty+=qty;
+			printf("Nhap hang hoa %s thanh cong!!\n",productId);
+			addLog(productId,"IN");
+			break;
+		case 2:
+			while(1){
+				printf("Nhap so luong hang hoa can xuat: ");
+				fgets(amount,10,stdin);
+				amount[strcspn(amount,"\n")]=0;
+				if(strlen(amount)==0){
+					printf("So luong hang hoa can xuat khong duoc de trong!!\n");
+					continue;
+				}
+				break;
+			}
+			qty=atoi(amount);
+			if(qty>products[index].qty){
+				printf("So luong hang hoa %s vuot qua so luong hien co!!\n",productId);
+				return;
+			}
+			products[index].qty-=qty;
+			printf("Xuat hang hoa %s thanh cong!!\n",productId);
+			addLog(productId,"OUT");
+			break;
+		default:
+			printf("Lua chon khong hop le!!\n");
+	}
+}
+
+void showHistory(){
+    char productId[10];
+    while(1){
+    	printf("Nhap ID hang hoa can xem lich su: ");
+    	fflush(stdin);
+    	fgets(productId,10,stdin);
+    	productId[strcspn(productId,"\n")]=0;
+    	if(strlen(productId)==0){
+			printf("ID hang hoa khong duoc de trong!!\n");
+			continue;
+		}
+		break;
+	}
+	int index=0;
+	int totalTrans=0;
+	int n=transCount;
+    printf("-----------------LICH SU GIAO DICH CUA %s----------------\n", productId);
+    printf("+--------------+---------------+------------+------------+\n");
+    printf("| Ma giao dich |  Ma hang hoa  |   IN/OUT   |    Ngay    |\n");
+    printf("+--------------+---------------+------------+------------+\n");
+    while(index<n){
+        if(strcmp(trans[index].productId,productId)==0){
+            printf("| %-12s | %-13s | %-10s | %-9s |\n",
+                trans[index].transId,
+                trans[index].productId,
+                strcmp(trans[index].type,"IN")==0?"IN":"OUT",
+                trans[index].date
+            );
+            printf("+--------------+---------------+------------+------------+\n");
+            totalTrans++;
+        }
+        index++;
+    }
+    if(totalTrans==0){
+        printf("Vat tu %s chua co giao dich nhap/xuat!!\n",productId);
+        return;
+    }
+}
+
